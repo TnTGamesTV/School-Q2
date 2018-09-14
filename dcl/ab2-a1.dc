@@ -1,0 +1,18 @@
+  0 JMP      5
+  1 DEF      0
+  2 DEF      0
+  3 DEF      0
+  4 DEF      0
+  5 INM      1
+  6 INM      2
+  7 LDA      1
+  8 SUB      2
+  9 JPL      8
+ 10 JZE     12
+ 11 JMS     14
+ 12 OUT     16
+ 13 END
+ 14 OUT     17
+ 15 END
+ 16 DEF      1
+ 17 DEF      0
