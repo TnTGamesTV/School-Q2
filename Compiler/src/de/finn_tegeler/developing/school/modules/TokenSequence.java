@@ -23,30 +23,25 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.finn_tegeler.developing.school;
+package de.finn_tegeler.developing.school.modules;
 
-import de.finn_tegeler.developing.school.modules.TokenManager;
-
-import java.io.IOException;
-import java.io.StreamTokenizer;
-import java.io.StringReader;
+import java.util.List;
 
 /**
- * @author TnTGamesTV Project: Compiler Date: 30-10-2018
+ * @author Finn Tegeler
  */
-public class Main {
+public class TokenSequence {
 	
-	public static String INPUT = "void main() {\n" + "    int x = 2 + 3;\n" + "}";
+	private List<Token> _options;
 	
-	public static void main(final String[] args) {
-		TokenManager.init();
-		StreamTokenizer tokenizer = new StreamTokenizer(new StringReader(INPUT));
-		try {
-			Scanner scanner = new Scanner(tokenizer);
-			scanner.check();
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
+	public TokenSequence(List<Token> options) {
+		this._options = options;
+	}
+	
+	/**
+	 * @return the options
+	 */
+	public List<Token> getOptions() {
+		return this._options;
 	}
 }

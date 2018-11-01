@@ -23,30 +23,73 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.finn_tegeler.developing.school;
+package de.finn_tegeler.developing.school.modules;
 
-import de.finn_tegeler.developing.school.modules.TokenManager;
-
-import java.io.IOException;
-import java.io.StreamTokenizer;
-import java.io.StringReader;
+import java.util.List;
 
 /**
- * @author TnTGamesTV Project: Compiler Date: 30-10-2018
+ * @author Finn Tegeler
  */
-public class Main {
+public class DataWrapper {
 	
-	public static String INPUT = "void main() {\n" + "    int x = 2 + 3;\n" + "}";
+	public static final int	MAX_DEPTH	= 25;
+	private int				_depth		= 0;
+	private int				_index		= 0;
+	private List<String>	_rawTokens;
 	
-	public static void main(final String[] args) {
-		TokenManager.init();
-		StreamTokenizer tokenizer = new StreamTokenizer(new StringReader(INPUT));
-		try {
-			Scanner scanner = new Scanner(tokenizer);
-			scanner.check();
+	public DataWrapper(List<String> rawTokens) {
+		this._rawTokens = rawTokens;
+	}
+	
+	public void addIndex(int toAdd) {
+		_index += toAdd;
+		if (_index < 0 || _index >= _rawTokens.size()) {
+			System.err.println("Could not perform this subtracton on index as it is out of range");
+			_index -= toAdd;
 		}
-		catch (IOException e) {
-			e.printStackTrace();
+	}
+	
+	public String get() {
+		return _rawTokens.get(_index);
+	}
+	
+	public boolean in() {
+		if ((_depth + 1) < MAX_DEPTH) {
+			_depth++;
+			return true;
+		} else {
+			System.out.println("[INFO] Reached maximum depth of 100");
+			return false;
+		}
+	}
+	
+	public void nextRawToken() {
+		_index++;
+		if (_index < 0 || _index >= _rawTokens.size()) {
+			System.err.println("Could not move to next raw token as this is the end.");
+			_index--;
+		}
+	}
+	
+	public void out() {
+		if (_depth > 0) {
+			_depth--;
+		}
+	}
+	
+	public void setIndex(int index) {
+		if (index >= 0 && index < _rawTokens.size()) {
+			_index = index;
+		} else {
+			System.err.println("The given index (" + index + ") is outside of the valid range");
+		}
+	}
+	
+	public void subIndex(int toSub) {
+		_index -= toSub;
+		if (_index < 0 || _index >= _rawTokens.size()) {
+			System.err.println("Could not perform this subtracton on index as it is out of range");
+			_index += toSub;
 		}
 	}
 }

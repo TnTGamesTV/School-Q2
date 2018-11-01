@@ -25,28 +25,61 @@
  */
 package de.finn_tegeler.developing.school;
 
+import de.finn_tegeler.developing.school.modules.DataWrapper;
+import de.finn_tegeler.developing.school.modules.Token;
 import de.finn_tegeler.developing.school.modules.TokenManager;
 
 import java.io.IOException;
 import java.io.StreamTokenizer;
-import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * @author TnTGamesTV Project: Compiler Date: 30-10-2018
+ * @author Finn Tegeler
  */
-public class Main {
+public class Scanner {
 	
-	public static String INPUT = "void main() {\n" + "    int x = 2 + 3;\n" + "}";
+	private List<String>	_allRawTokens;
+	private StreamTokenizer	_tokenizer;
+	private DataWrapper	wrapper;
 	
-	public static void main(final String[] args) {
-		TokenManager.init();
-		StreamTokenizer tokenizer = new StreamTokenizer(new StringReader(INPUT));
-		try {
-			Scanner scanner = new Scanner(tokenizer);
-			scanner.check();
+	public Scanner(StreamTokenizer tokenizer) throws IOException {
+		tokenizer.ordinaryChar('+');
+		tokenizer.ordinaryChar('-');
+		tokenizer.ordinaryChar('*');
+		tokenizer.ordinaryChar('/');
+		this._tokenizer = tokenizer;
+		this._allRawTokens = new ArrayList<>();
+		_init();
+	}
+	
+	private void _addRawToken(String rawToken) {
+		_allRawTokens.add(rawToken);
+	}
+	
+	private boolean _advance() throws IOException {
+		return _tokenizer.ttype != StreamTokenizer.TT_EOF && _tokenizer.nextToken() != StreamTokenizer.TT_EOF;
+	}
+	
+	private void _init() throws IOException {
+		// Iterate over all rawTokens
+		while (_advance()) {
+			int type = _tokenizer.ttype;
+			if (type == StreamTokenizer.TT_EOL) {
+				continue;
+			} else if (type == StreamTokenizer.TT_NUMBER) {
+				_addRawToken("" + _tokenizer.nval);
+			} else if (type == StreamTokenizer.TT_WORD) {
+				_addRawToken(_tokenizer.sval);
+			} else {
+				_addRawToken(new Character((char) _tokenizer.ttype).toString());
+			}
 		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
+	}
+	
+	public void check() {
+		wrapper = new DataWrapper(_allRawTokens);
+		Token methodToken = TokenManager.getTokenById("methodToken");
+		System.out.println("Matches: " + methodToken.matches(wrapper));
 	}
 }

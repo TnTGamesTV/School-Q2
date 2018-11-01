@@ -23,30 +23,22 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.finn_tegeler.developing.school;
+package de.finn_tegeler.developing.school.modules;
 
-import de.finn_tegeler.developing.school.modules.TokenManager;
-
-import java.io.IOException;
-import java.io.StreamTokenizer;
-import java.io.StringReader;
+import java.util.stream.Collectors;
 
 /**
- * @author TnTGamesTV Project: Compiler Date: 30-10-2018
+ * @author Finn Tegeler
  */
-public class Main {
+public abstract class Token {
 	
-	public static String INPUT = "void main() {\n" + "    int x = 2 + 3;\n" + "}";
-	
-	public static void main(final String[] args) {
-		TokenManager.init();
-		StreamTokenizer tokenizer = new StreamTokenizer(new StringReader(INPUT));
-		try {
-			Scanner scanner = new Scanner(tokenizer);
-			scanner.check();
+	public String getID() {
+		if (TokenManager.getTokenMapping().containsValue(this)) {
+			return TokenManager.getTokenMapping().entrySet().stream().filter((entry) -> entry.getValue().equals(this))
+			        .collect(Collectors.toList()).get(0).getKey();
 		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
+		return "";
 	}
+	
+	public abstract boolean matches(DataWrapper wrapper);
 }

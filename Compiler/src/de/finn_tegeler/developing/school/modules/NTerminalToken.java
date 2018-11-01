@@ -23,30 +23,45 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.finn_tegeler.developing.school;
+package de.finn_tegeler.developing.school.modules;
 
-import de.finn_tegeler.developing.school.modules.TokenManager;
-
-import java.io.IOException;
-import java.io.StreamTokenizer;
-import java.io.StringReader;
+import java.util.Arrays;
+import java.util.List;
 
 /**
- * @author TnTGamesTV Project: Compiler Date: 30-10-2018
+ * @author Finn Tegeler
  */
-public class Main {
+public class NTerminalToken extends Token {
 	
-	public static String INPUT = "void main() {\n" + "    int x = 2 + 3;\n" + "}";
+	private List<TokenSequence> _options;
 	
-	public static void main(final String[] args) {
-		TokenManager.init();
-		StreamTokenizer tokenizer = new StreamTokenizer(new StringReader(INPUT));
-		try {
-			Scanner scanner = new Scanner(tokenizer);
-			scanner.check();
+	public NTerminalToken(TokenSequence... options) {
+		this._options = Arrays.asList(options);
+	}
+	
+	@Override
+	public boolean matches(DataWrapper wrapper) {
+		if (wrapper.in()) {
+			for (TokenSequence sequence : _options) {
+				int totalMoves = 0;
+				boolean result = true;
+				for (Token token : sequence.getOptions()) {
+					if (!token.matches(wrapper)) { // If one token does not match in the sequence
+						result = false; // This sequence does not match
+						break; // And the next one will be tried
+					} else { // Check next raw token
+						totalMoves++;
+					}
+				}
+				if (!result) { // If the hole sequence failed
+					wrapper.subIndex(totalMoves); // Return to start
+				} else {
+					// wrapper.nextRawToken(); // Otherwise prepare for next token check
+					return true;
+				}
+			}
+			wrapper.out();
 		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
+		return false;
 	}
 }
