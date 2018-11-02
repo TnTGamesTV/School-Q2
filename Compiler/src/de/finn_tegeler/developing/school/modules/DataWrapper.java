@@ -25,6 +25,7 @@
  */
 package de.finn_tegeler.developing.school.modules;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,7 +37,9 @@ public class DataWrapper {
 	private int				_depth		= 0;
 	private int				_index		= 0;
 	private List<String>	_rawTokens;
-	private int				_recorded	= -1;
+	
+	private int _currentRecordingIndex = 0;
+	private List<Integer> _recordings = new ArrayList<>();
 	
 	public DataWrapper(List<String> rawTokens) {
 		this._rawTokens = rawTokens;
@@ -48,8 +51,8 @@ public class DataWrapper {
 			System.err.println("Could not perform this subtracton on index as it is out of range");
 			_index -= toAdd;
 		} else {
-			if (this._recorded >= 0) {
-				this._recorded += toAdd;
+			if (this._recordings.size() > 0) {
+				this._recordings.set(_currentRecordingIndex, this._recordings.get(_currentRecordingIndex) + toAdd);
 			}
 		}
 	}
@@ -58,8 +61,8 @@ public class DataWrapper {
 		return _rawTokens.get(_index);
 	}
 	
-	public int getRecording() {
-		return this._recorded;
+	public int getRecording(int index) {
+		return this._recordings.get(index);
 	}
 	
 	public boolean in() {
@@ -78,8 +81,8 @@ public class DataWrapper {
 			System.err.println("Could not move to next raw token as this is the end.");
 			_index--;
 		} else {
-			if (this._recorded >= 0) {
-				this._recorded++;
+			if (this._recordings.size() > 0) {
+				this._recordings.set(_currentRecordingIndex, this._recordings.get(_currentRecordingIndex) + 1);
 			}
 		}
 	}
@@ -90,12 +93,19 @@ public class DataWrapper {
 		}
 	}
 	
-	public void startRecording() {
-		this._recorded = 0;
+	public int startRecording() {
+		this._recordings.add(0);
+		int id =this._recordings.size() - 1;
+		
+		this._currentRecordingIndex = id;
+		return id;
 	}
 	
-	public void stopRecording() {
-		this._recorded = -1;
+	public void stopRecording(int index) {
+		this._recordings.set(index, -1);
+		if(_currentRecordingIndex > 0) {
+			this._currentRecordingIndex--;
+		}
 	}
 	
 	public void subIndex(int toSub) {
@@ -104,8 +114,8 @@ public class DataWrapper {
 			System.err.println("Could not perform this subtracton on index as it is out of range");
 			_index += toSub;
 		} else {
-			if (this._recorded >= 0) {
-				this._recorded -= toSub;
+			if (this._recordings.size() > 0) {
+				this._recordings.set(_currentRecordingIndex, this._recordings.get(_currentRecordingIndex) - toSub);
 			}
 		}
 	}

@@ -80,9 +80,9 @@ public class TokenManager {
 		        _sequence(multiplyToken), _sequence(divideToken));
 		/**/
 		Token expressionToken = new NTerminalToken(
-		        _sequence(typeToken, identifierToken, equalToken, _self("expressionToken"), semicolonToken),
+		        _sequence(typeToken, identifierToken, equalToken, integerToken, arithmeticOperationToken, integerToken, semicolonToken)/*,
 		        _sequence(_self("expressionToken"), arithmeticOperationToken, _self("expressionToken")),
-		        _sequence(integerToken), _sequence(identifierToken));
+		        _sequence(integerToken), _sequence(identifierToken)*/);
 		/**/
 		Token voidToken = new TerminalToken("void");
 		Token openArgumentToken = new TerminalToken("(");

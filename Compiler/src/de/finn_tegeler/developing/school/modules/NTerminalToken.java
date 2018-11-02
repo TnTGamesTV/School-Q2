@@ -41,9 +41,10 @@ public class NTerminalToken extends Token {
 	
 	@Override
 	public boolean matches(DataWrapper wrapper) {
+		boolean globalResult = false;
 		if (wrapper.in()) {
 			for (TokenSequence sequence : _options) {
-				wrapper.startRecording();
+				int id = wrapper.startRecording();
 				boolean result = true;
 				for (Token token : sequence.getOptions()) {
 					if (!token.matches(wrapper)) { // If one token does not match in the sequence
@@ -52,17 +53,16 @@ public class NTerminalToken extends Token {
 					}
 				}
 				if (!result) { // If the hole sequence failed
-					int totalMoves = wrapper.getRecording();
-					wrapper.stopRecording();
+					int totalMoves = wrapper.getRecording(id);
+					wrapper.stopRecording(id);
 					wrapper.subIndex(totalMoves); // Return to start
 				} else {
-					// wrapper.nextRawToken(); // Otherwise prepare for next token check
-					wrapper.out();
-					return true;
+					globalResult = true;
+					break;
 				}
 			}
 			wrapper.out();
 		}
-		return false;
+		return globalResult;
 	}
 }
