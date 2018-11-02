@@ -36,6 +36,7 @@ public class DataWrapper {
 	private int				_depth		= 0;
 	private int				_index		= 0;
 	private List<String>	_rawTokens;
+	private int				_recorded	= -1;
 	
 	public DataWrapper(List<String> rawTokens) {
 		this._rawTokens = rawTokens;
@@ -46,11 +47,19 @@ public class DataWrapper {
 		if (_index < 0 || _index >= _rawTokens.size()) {
 			System.err.println("Could not perform this subtracton on index as it is out of range");
 			_index -= toAdd;
+		} else {
+			if (this._recorded >= 0) {
+				this._recorded += toAdd;
+			}
 		}
 	}
 	
 	public String get() {
 		return _rawTokens.get(_index);
+	}
+	
+	public int getRecording() {
+		return this._recorded;
 	}
 	
 	public boolean in() {
@@ -68,6 +77,10 @@ public class DataWrapper {
 		if (_index < 0 || _index >= _rawTokens.size()) {
 			System.err.println("Could not move to next raw token as this is the end.");
 			_index--;
+		} else {
+			if (this._recorded >= 0) {
+				this._recorded++;
+			}
 		}
 	}
 	
@@ -77,12 +90,12 @@ public class DataWrapper {
 		}
 	}
 	
-	public void setIndex(int index) {
-		if (index >= 0 && index < _rawTokens.size()) {
-			_index = index;
-		} else {
-			System.err.println("The given index (" + index + ") is outside of the valid range");
-		}
+	public void startRecording() {
+		this._recorded = 0;
+	}
+	
+	public void stopRecording() {
+		this._recorded = -1;
 	}
 	
 	public void subIndex(int toSub) {
@@ -90,6 +103,10 @@ public class DataWrapper {
 		if (_index < 0 || _index >= _rawTokens.size()) {
 			System.err.println("Could not perform this subtracton on index as it is out of range");
 			_index += toSub;
+		} else {
+			if (this._recorded >= 0) {
+				this._recorded -= toSub;
+			}
 		}
 	}
 }
