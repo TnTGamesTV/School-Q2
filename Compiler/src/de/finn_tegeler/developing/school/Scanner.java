@@ -25,21 +25,21 @@
  */
 package de.finn_tegeler.developing.school;
 
-import de.finn_tegeler.developing.school.modules.DataWrapper;
-import de.finn_tegeler.developing.school.modules.Token;
-import de.finn_tegeler.developing.school.modules.TokenManager;
-
 import java.io.IOException;
 import java.io.StreamTokenizer;
 import java.util.ArrayList;
 import java.util.List;
+
+import de.finn_tegeler.developing.school.modules.DataWrapper;
+import de.finn_tegeler.developing.school.modules.Token;
+import de.finn_tegeler.developing.school.modules.TokenManager;
 
 /**
  * @author Finn Tegeler
  */
 public class Scanner {
 	
-	private List<String>	_allRawTokens;
+	private List<RawToken>	_allRawTokens;
 	private StreamTokenizer	_tokenizer;
 	private DataWrapper	wrapper;
 	
@@ -54,7 +54,7 @@ public class Scanner {
 	}
 	
 	private void _addRawToken(String rawToken) {
-		_allRawTokens.add(rawToken);
+		_allRawTokens.add(new RawToken(rawToken, _tokenizer.lineno()));
 	}
 	
 	private boolean _advance() throws IOException {

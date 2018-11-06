@@ -28,6 +28,8 @@ package de.finn_tegeler.developing.school.modules;
 import java.util.Arrays;
 import java.util.List;
 
+import de.finn_tegeler.developing.school.Main;
+
 /**
  * @author Finn Tegeler
  */
@@ -63,6 +65,10 @@ public class NTerminalToken extends Token {
 			}
 			wrapper.out();
 		}
+		if(!globalResult) {
+			Main.outputError("Error hat line " + wrapper.getToken().getLine());
+		}
+		
 		return globalResult;
 	}
 }

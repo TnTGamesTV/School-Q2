@@ -28,6 +28,8 @@ package de.finn_tegeler.developing.school.modules;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.finn_tegeler.developing.school.RawToken;
+
 /**
  * @author Finn Tegeler
  */
@@ -36,12 +38,12 @@ public class DataWrapper {
 	public static final int	MAX_DEPTH	= 25;
 	private int				_depth		= 0;
 	private int				_index		= 0;
-	private List<String>	_rawTokens;
+	private List<RawToken>	_rawTokens;
 	
 	private int _currentRecordingIndex = 0;
 	private List<Integer> _recordings = new ArrayList<>();
 	
-	public DataWrapper(List<String> rawTokens) {
+	public DataWrapper(List<RawToken> rawTokens) {
 		this._rawTokens = rawTokens;
 	}
 	
@@ -58,6 +60,10 @@ public class DataWrapper {
 	}
 	
 	public String get() {
+		return _rawTokens.get(_index).getContent();
+	}
+	
+	public RawToken getToken() {
 		return _rawTokens.get(_index);
 	}
 	

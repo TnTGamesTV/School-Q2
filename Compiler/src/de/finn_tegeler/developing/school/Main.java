@@ -38,9 +38,12 @@ public class Main {
 	
 	public static String INPUT = "void main() {\n" + "    int x = 2 + 3;\n" + "}";
 	
+	private static boolean outputted;
+	
 	public static void main(final String[] args) {
 		TokenManager.init();
 		StreamTokenizer tokenizer = new StreamTokenizer(new StringReader(INPUT));
+		
 		try {
 			Scanner scanner = new Scanner(tokenizer);
 			scanner.check();
@@ -48,5 +51,12 @@ public class Main {
 		catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static void outputError(String content) {
+		if(!outputted) {
+			System.out.println("Error: " + content);
+			outputted = true;
+		} 
 	}
 }
