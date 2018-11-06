@@ -66,7 +66,7 @@ public class NTerminalToken extends Token {
 			wrapper.out();
 		}
 		if(!globalResult) {
-			Main.outputError("Error hat line " + wrapper.getToken().getLine());
+			Main.outputError("with token " + wrapper.getToken().getContent() + " at " + wrapper.getToken().getLine() + "; globalResult = " + globalResult);
 		}
 		
 		return globalResult;
