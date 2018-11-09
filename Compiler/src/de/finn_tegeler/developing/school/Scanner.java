@@ -54,7 +54,7 @@ public class Scanner {
 	}
 	
 	private void _addRawToken(String rawToken) {
-		_allRawTokens.add(new RawToken(rawToken, _tokenizer.lineno()));
+		_allRawTokens.add(new RawToken(rawToken, _tokenizer.lineno(), 0));
 	}
 	
 	private boolean _advance() throws IOException {

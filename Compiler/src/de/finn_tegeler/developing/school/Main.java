@@ -25,12 +25,6 @@
  */
 package de.finn_tegeler.developing.school;
 
-import de.finn_tegeler.developing.school.modules.TokenManager;
-
-import java.io.IOException;
-import java.io.StreamTokenizer;
-import java.io.StringReader;
-
 /**
  * @author TnTGamesTV Project: Compiler Date: 30-10-2018
  */
@@ -41,7 +35,13 @@ public class Main {
 	private static boolean outputted;
 	
 	public static void main(final String[] args) {
-		TokenManager.init();
+		Tokenizer tokenizer = new Tokenizer(INPUT);
+		
+		tokenizer.getTokens().forEach((rawToken) -> {
+			System.out.println("Token: " + rawToken.getContent() + " @ " + rawToken.getLine() + ":" + rawToken.getCharacter());
+		});
+		
+		/*TokenManager.init();
 		StreamTokenizer tokenizer = new StreamTokenizer(new StringReader(INPUT));
 		
 		try {
@@ -50,7 +50,7 @@ public class Main {
 		}
 		catch (IOException e) {
 			e.printStackTrace();
-		}
+		}*/
 	}
 	
 	public static void outputError(String content) {

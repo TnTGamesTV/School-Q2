@@ -34,10 +34,19 @@ public class RawToken {
 	
 	private String content;
 	private int line;
+	private int character;
 	
-	public RawToken(String content, int line) {
+	/**
+	 * @return the character
+	 */
+	public int getCharacter() {
+		return this.character;
+	}
+
+	public RawToken(String content, int line, int character) {
 		this.content = content;
 		this.line = line;
+		this.character = character;
 	}
 
 	/**
