@@ -38,11 +38,13 @@ public class IntegerToken extends Token {
 	@Override
 	public boolean matches(DataWrapper wrapper) {
 		try {
-			Double.parseDouble(wrapper.get());
+			Integer.parseInt(wrapper.get());
+			System.out.println("I FOUND AN INTEGER: " + wrapper.get());
 			wrapper.nextRawToken();
 			return true;
 		}
 		catch (Exception e) {
+			wrapper.setErrorMessage("Token is not an integer");
 			return false;
 		}
 	}

@@ -25,10 +25,16 @@
  */
 package de.finn_tegeler.developing.school.modules;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * @author Finn Tegeler
  */
 public class IdentifierToken extends Token {
+	
+	public static final List<Character> CONST_FORBIDDEN_CHARS = Arrays.asList('+', '-', '*', '/', ';', '{', '}', '(',
+	        ')');
 	
 	/*
 	 * (non-Javadoc)
@@ -37,7 +43,21 @@ public class IdentifierToken extends Token {
 	 */
 	@Override
 	public boolean matches(DataWrapper wrapper) {
-		wrapper.nextRawToken();
-		return true;
+		String token = wrapper.get();
+		if (token.matches("[a-zA-Z_]+.*")) {
+			for (Character forbiddenCharacter : CONST_FORBIDDEN_CHARS) {
+				for (char c : token.toCharArray()) {
+					if (forbiddenCharacter.charValue() == c) {
+						wrapper.setErrorMessage(
+						        "Token contains the forbidden character " + forbiddenCharacter.toString());
+						return false;
+					}
+				}
+			}
+			wrapper.nextRawToken();
+			return true;
+		}
+		wrapper.setErrorMessage("Token is not a valid identifier");
+		return false;
 	}
 }

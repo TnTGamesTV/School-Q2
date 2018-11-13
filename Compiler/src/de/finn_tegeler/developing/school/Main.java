@@ -25,38 +25,20 @@
  */
 package de.finn_tegeler.developing.school;
 
+import de.finn_tegeler.developing.school.modules.TokenManager;
+
 /**
  * @author TnTGamesTV Project: Compiler Date: 30-10-2018
  */
 public class Main {
 	
-	public static String INPUT = "void main() {\n" + "    int x = 2 + 3;\n" + "}";
-	
-	private static boolean outputted;
+	public static String	INPUT				= "void main() {\n" + "    int x = x + 3 + 2;\n" + "}";
+	public static String	INPUT_EXPRESSION	= "int x = 1;";
+	private static boolean	outputted;
 	
 	public static void main(final String[] args) {
-		Tokenizer tokenizer = new Tokenizer(INPUT);
-		
-		tokenizer.getTokens().forEach((rawToken) -> {
-			System.out.println("Token: " + rawToken.getContent() + " @ " + rawToken.getLine() + ":" + rawToken.getCharacter());
-		});
-		
-		/*TokenManager.init();
-		StreamTokenizer tokenizer = new StreamTokenizer(new StringReader(INPUT));
-		
-		try {
-			Scanner scanner = new Scanner(tokenizer);
-			scanner.check();
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}*/
-	}
-	
-	public static void outputError(String content) {
-		if(!outputted) {
-			System.out.println("Error: " + content);
-			outputted = true;
-		} 
+		Scanner scanner = new Scanner(INPUT);
+		TokenManager.init();
+		scanner.check();
 	}
 }

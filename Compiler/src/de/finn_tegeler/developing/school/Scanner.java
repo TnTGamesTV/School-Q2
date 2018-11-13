@@ -25,11 +25,6 @@
  */
 package de.finn_tegeler.developing.school;
 
-import java.io.IOException;
-import java.io.StreamTokenizer;
-import java.util.ArrayList;
-import java.util.List;
-
 import de.finn_tegeler.developing.school.modules.DataWrapper;
 import de.finn_tegeler.developing.school.modules.Token;
 import de.finn_tegeler.developing.school.modules.TokenManager;
@@ -39,47 +34,26 @@ import de.finn_tegeler.developing.school.modules.TokenManager;
  */
 public class Scanner {
 	
-	private List<RawToken>	_allRawTokens;
-	private StreamTokenizer	_tokenizer;
-	private DataWrapper	wrapper;
+	private Tokenizer _tokenizer;
 	
-	public Scanner(StreamTokenizer tokenizer) throws IOException {
-		tokenizer.ordinaryChar('+');
-		tokenizer.ordinaryChar('-');
-		tokenizer.ordinaryChar('*');
-		tokenizer.ordinaryChar('/');
-		this._tokenizer = tokenizer;
-		this._allRawTokens = new ArrayList<>();
-		_init();
-	}
-	
-	private void _addRawToken(String rawToken) {
-		_allRawTokens.add(new RawToken(rawToken, _tokenizer.lineno(), 0));
-	}
-	
-	private boolean _advance() throws IOException {
-		return _tokenizer.ttype != StreamTokenizer.TT_EOF && _tokenizer.nextToken() != StreamTokenizer.TT_EOF;
-	}
-	
-	private void _init() throws IOException {
-		// Iterate over all rawTokens
-		while (_advance()) {
-			int type = _tokenizer.ttype;
-			if (type == StreamTokenizer.TT_EOL) {
-				continue;
-			} else if (type == StreamTokenizer.TT_NUMBER) {
-				_addRawToken("" + _tokenizer.nval);
-			} else if (type == StreamTokenizer.TT_WORD) {
-				_addRawToken(_tokenizer.sval);
-			} else {
-				_addRawToken(new Character((char) _tokenizer.ttype).toString());
-			}
-		}
+	public Scanner(String input) {
+		this._tokenizer = new Tokenizer(input);
 	}
 	
 	public void check() {
-		wrapper = new DataWrapper(_allRawTokens);
-		Token methodToken = TokenManager.getTokenById("methodToken");
-		System.out.println("Matches: " + methodToken.matches(wrapper));
+		DataWrapper wrapper = new DataWrapper(_tokenizer.getTokens());
+		Token rootToken = TokenManager.getTokenById("rootToken");
+		boolean result = rootToken.matches(wrapper);
+		try {
+			Thread.sleep(1000);
+		}
+		catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		if (!result) {
+			System.out.println(wrapper.getGlobalErrorMessage());
+		} else {
+			System.out.println("Found no errors");
+		}
 	}
 }

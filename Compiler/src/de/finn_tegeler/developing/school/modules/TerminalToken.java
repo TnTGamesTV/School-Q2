@@ -30,10 +30,12 @@ package de.finn_tegeler.developing.school.modules;
  */
 public class TerminalToken extends Token {
 	
-	private String _value;
+	private String	_errorMessage;
+	private String	_value;
 	
-	public TerminalToken(String value) {
+	public TerminalToken(String value, String errorMessage) {
 		this._value = value;
+		this._errorMessage = errorMessage;
 	}
 	
 	/**
@@ -54,6 +56,7 @@ public class TerminalToken extends Token {
 			wrapper.nextRawToken();
 			return true;
 		}
+		wrapper.setErrorMessage(_errorMessage);
 		return false;
 	}
 }

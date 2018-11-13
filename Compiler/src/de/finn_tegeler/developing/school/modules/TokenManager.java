@@ -62,33 +62,32 @@ public class TokenManager {
 	}
 	
 	public static void init() {
-		Token semicolonToken = new TerminalToken(";");
+		Token semicolonToken = new TerminalToken(";", "Missing end of expression");
 		/**/
 		Token identifierToken = new IdentifierToken();
-		Token intTypeToken = new TerminalToken("int");
+		Token intTypeToken = new TerminalToken("int", "Wrong type identifier");
 		/**/
 		Token typeToken = new NTerminalToken(_sequence(intTypeToken), _sequence(identifierToken));
 		/**/
-		Token equalToken = new TerminalToken("=");
-		Token addToken = new TerminalToken("+");
-		Token subtractToken = new TerminalToken("-");
-		Token multiplyToken = new TerminalToken("*");
-		Token divideToken = new TerminalToken("/");
+		Token equalToken = new TerminalToken("=", "The given expression does not contain '='");
+		Token addToken = new TerminalToken("+", "The token is not a valid arithmetic operator");
+		Token subtractToken = new TerminalToken("-", "The token is not a valid arithmetic operator");
+		Token multiplyToken = new TerminalToken("*", "The token is not a valid arithmetic operator");
+		Token divideToken = new TerminalToken("/", "The token is not a valid arithmetic operator");
 		Token integerToken = new IntegerToken();
 		/**/
 		Token arithmeticOperationToken = new NTerminalToken(_sequence(addToken), _sequence(subtractToken),
 		        _sequence(multiplyToken), _sequence(divideToken));
 		/**/
-		Token expressionToken = new NTerminalToken(
+		Token expressionToken = new NTerminalToken(_sequence(integerToken), _sequence(identifierToken),
 		        _sequence(typeToken, identifierToken, equalToken, _self("expressionToken"), semicolonToken),
-		        _sequence(_self("expressionToken"), arithmeticOperationToken, _self("expressionToken")),
-		        _sequence(integerToken), _sequence(identifierToken));
+		        _sequence(_self("expressionToken"), arithmeticOperationToken, _self("expressionToken")));
 		/**/
-		Token voidToken = new TerminalToken("void");
-		Token openArgumentToken = new TerminalToken("(");
-		Token closingArgumentToken = new TerminalToken(")");
-		Token openCurlyBracketToken = new TerminalToken("{");
-		Token closingCurlyBracketToken = new TerminalToken("}");
+		Token voidToken = new TerminalToken("void", "Missing function return value declaration");
+		Token openArgumentToken = new TerminalToken("(", "Missing function arguments");
+		Token closingArgumentToken = new TerminalToken(")", "Missing end of function arguments");
+		Token openCurlyBracketToken = new TerminalToken("{", "Missing begin auf function body");
+		Token closingCurlyBracketToken = new TerminalToken("}", "Missing end of function body");
 		Token methodToken = new NTerminalToken(_sequence(voidToken, identifierToken, openArgumentToken,
 		        closingArgumentToken, openCurlyBracketToken, expressionToken, closingCurlyBracketToken));
 		/**/

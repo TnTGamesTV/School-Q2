@@ -25,23 +25,24 @@
  */
 package de.finn_tegeler.developing.school.modules;
 
+import de.finn_tegeler.developing.school.RawToken;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import de.finn_tegeler.developing.school.RawToken;
 
 /**
  * @author Finn Tegeler
  */
 public class DataWrapper {
 	
-	public static final int	MAX_DEPTH	= 25;
-	private int				_depth		= 0;
-	private int				_index		= 0;
+	public static final int	MAX_DEPTH				= 100;
+	private int				_currentRecordingIndex	= 0;
+	private int				_depth					= 0;
+	private String			_globalErrorMessage;
+	private int				_index					= 0;
 	private List<RawToken>	_rawTokens;
-	
-	private int _currentRecordingIndex = 0;
-	private List<Integer> _recordings = new ArrayList<>();
+	private List<Integer>	_recordings				= new ArrayList<>();
+	private String			errorMessage;
 	
 	public DataWrapper(List<RawToken> rawTokens) {
 		this._rawTokens = rawTokens;
@@ -63,12 +64,23 @@ public class DataWrapper {
 		return _rawTokens.get(_index).getContent();
 	}
 	
-	public RawToken getToken() {
-		return _rawTokens.get(_index);
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+	
+	/**
+	 * @return the globalErrorMessage
+	 */
+	public String getGlobalErrorMessage() {
+		return this._globalErrorMessage;
 	}
 	
 	public int getRecording(int index) {
 		return this._recordings.get(index);
+	}
+	
+	public RawToken getToken() {
+		return _rawTokens.get(_index);
 	}
 	
 	public boolean in() {
@@ -76,7 +88,7 @@ public class DataWrapper {
 			_depth++;
 			return true;
 		} else {
-			System.out.println("[INFO] Reached maximum depth of 100");
+			// System.out.println("[INFO] Reached maximum depth of 100");
 			return false;
 		}
 	}
@@ -99,17 +111,28 @@ public class DataWrapper {
 		}
 	}
 	
+	public void setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
+	}
+	
+	/**
+	 * @param globalErrorMessage
+	 *            the globalErrorMessage to set
+	 */
+	public void setGlobalErrorMessage(String globalErrorMessage) {
+		this._globalErrorMessage = globalErrorMessage;
+	}
+	
 	public int startRecording() {
 		this._recordings.add(0);
-		int id =this._recordings.size() - 1;
-		
+		int id = this._recordings.size() - 1;
 		this._currentRecordingIndex = id;
 		return id;
 	}
 	
 	public void stopRecording(int index) {
 		this._recordings.set(index, -1);
-		if(_currentRecordingIndex > 0) {
+		if (_currentRecordingIndex > 0) {
 			this._currentRecordingIndex--;
 		}
 	}

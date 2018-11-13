@@ -28,8 +28,6 @@ package de.finn_tegeler.developing.school.modules;
 import java.util.Arrays;
 import java.util.List;
 
-import de.finn_tegeler.developing.school.Main;
-
 /**
  * @author Finn Tegeler
  */
@@ -47,11 +45,13 @@ public class NTerminalToken extends Token {
 		if (wrapper.in()) {
 			for (TokenSequence sequence : _options) {
 				int id = wrapper.startRecording();
-				boolean result = true;
+				boolean result = false;
 				for (Token token : sequence.getOptions()) {
 					if (!token.matches(wrapper)) { // If one token does not match in the sequence
 						result = false; // This sequence does not match
 						break; // And the next one will be tried
+					} else {
+						result = true;
 					}
 				}
 				if (!result) { // If the hole sequence failed
@@ -64,11 +64,15 @@ public class NTerminalToken extends Token {
 				}
 			}
 			wrapper.out();
+		} else {
+			System.out.println("[DEBUG] Was not allowed to go deeper with token '" + wrapper.get()
+			        + "' while checking for '" + getID() + "'");
 		}
-		if(!globalResult) {
-			Main.outputError("with token " + wrapper.getToken().getContent() + " at " + wrapper.getToken().getLine() + "; globalResult = " + globalResult);
+		if (!globalResult) {
+			wrapper.setGlobalErrorMessage(
+			        "Error with token '" + wrapper.getToken().getContent() + "' at " + wrapper.getToken().getLine()
+			                + ":" + wrapper.getToken().getCharacter() + ": " + wrapper.getErrorMessage());
 		}
-		
 		return globalResult;
 	}
 }
