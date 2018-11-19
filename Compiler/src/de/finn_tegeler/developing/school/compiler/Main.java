@@ -8,9 +8,6 @@
  * * Redistributions in binary form must reproduce the above copyright
  * notice, this list of conditions and the following disclaimer in the
  * documentation and/or other materials provided with the distribution.
- * * Neither the name of the Sun Microsystems, Inc. nor the names of its
- * contributors may be used to endorse or promote products derived from
- * this software without specific prior written permission.
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -23,40 +20,22 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.finn_tegeler.developing.school.modules;
+package de.finn_tegeler.developing.school.compiler;
 
 /**
  * @author Finn Tegeler
  */
-public class TerminalToken extends Token {
+public class Main {
 	
-	private String	_errorMessage;
-	private String	_value;
+	public static String	INPUT				= "void main() {\n" + "    int x = 3 + 2;\n" + "}";
+	public static String	INPUT_EXPRESSION	= "int x = 3;";
 	
-	public TerminalToken(String value, String errorMessage) {
-		this._value = value;
-		this._errorMessage = errorMessage;
-	}
-	
-	/**
-	 * @return the value
-	 */
-	public String getValue() {
-		return this._value;
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see
-	 * de.finn_tegeler.developing.school.modules.Token#matches(java.lang.String)
-	 */
-	@Override
-	public boolean matches(DataWrapper wrapper) {
-		if (_value.equals(wrapper.get())) {
-			wrapper.nextRawToken();
-			return true;
-		}
-		wrapper.setErrorMessage(_errorMessage);
-		return false;
+	public static void main(String[] args) {
+		IdentificationManager.init();
+		TokenManager tokenManager = new TokenManager(INPUT);
+		tokenManager.start();
+		tokenManager.getIdentifiedTokens().forEach((e) -> {
+			System.out.println("'" + e.getRawToken().getContent() + "': " + e.getGroup());
+		});
 	}
 }

@@ -25,7 +25,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.finn_tegeler.developing.school;
+package de.finn_tegeler.developing.school.compiler.util;
 
 /**
  * @author Finn Tegeler

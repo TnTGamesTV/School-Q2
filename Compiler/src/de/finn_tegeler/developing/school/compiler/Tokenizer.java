@@ -23,7 +23,9 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.finn_tegeler.developing.school;
+package de.finn_tegeler.developing.school.compiler;
+
+import de.finn_tegeler.developing.school.compiler.util.RawToken;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -113,44 +115,44 @@ public class Tokenizer {
 				}
 			} else {
 				if (_specialCharacters.contains(c)) { // If the character matches any special characters
-					if (_mapping.containsKey(_currentGroup)) { // And the current group is not
-						List<Character> currentGroup = _mapping.get(_currentGroup);
-						if (currentGroup.contains(c)) {
+					if (_mapping.containsKey(_currentGroup)) { // And the current group is special
+						List<Character> currentGroup = _mapping.get(_currentGroup); // get current group
+						if (currentGroup.contains(c)) { // if the special char is in that special group
 							// Same token
-							_addToCurrentToken(c);
+							_addToCurrentToken(c); // just add it
 						} else {
-							_bakeToken();
-							_switchCurrentGroup(c);
-							_resetAfterNewToken();
-							_addToCurrentToken(c);
+							_bakeToken(); // otherwise start a new token
+							_switchCurrentGroup(c); // switch group
+							_resetAfterNewToken(); // reset
+							_addToCurrentToken(c); // and add special char to new token
 						}
 					} else {
-						// TODO: Last curly bracket is not recog. | Debugging
 						// If the current group is default (anything) and the current char is special
 						_switchCurrentGroup(c); // Switch to detected group
 						_bakeToken(); // Create token
 						_resetAfterNewToken(); // Clear list
 						_addToCurrentToken(c); // Add current token to empty list
 					}
+					if (!_specialCharacters.contains(_lastCharacter)) {
+						_bakeToken();
+						_resetAfterNewToken();
+					}
 				} else {
 					// Anything that is not special
 					_addToCurrentToken(c);
 				}
 			}
-			if (_currentGroup >= 0) {
-				if (_currentToken.size() > 0) {
-					_bakeToken();
-					_resetAfterNewToken();
-				}
-			}
 			_character++;
+			_lastCharacter = c;
 		});
 	}
 	
 	public List<RawToken> getTokens() {
-		_tokenize();
-		_rawTokens = _rawTokens.stream().filter((rawToken) -> rawToken.getContent().length() > 0)
-		        .collect(Collectors.toList());
+		if (_rawTokens.size() == 0) {
+			_tokenize();
+			_rawTokens = _rawTokens.stream().filter((rawToken) -> rawToken.getContent().length() > 0)
+			        .collect(Collectors.toList());
+		}
 		return _rawTokens;
 	}
 }

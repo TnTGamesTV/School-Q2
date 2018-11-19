@@ -8,9 +8,6 @@
  * * Redistributions in binary form must reproduce the above copyright
  * notice, this list of conditions and the following disclaimer in the
  * documentation and/or other materials provided with the distribution.
- * * Neither the name of the Sun Microsystems, Inc. nor the names of its
- * contributors may be used to endorse or promote products derived from
- * this software without specific prior written permission.
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -23,22 +20,42 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.finn_tegeler.developing.school.modules;
+package de.finn_tegeler.developing.school.compiler;
+
+import de.finn_tegeler.developing.school.compiler.util.IdentifiedToken;
+import de.finn_tegeler.developing.school.compiler.util.RawToken;
+
+import java.util.List;
 
 /**
  * @author Finn Tegeler
  */
-public class SelfToken extends Token {
+public class TokenManager {
 	
-	private String _id;
+	private List<IdentifiedToken>	_identifiedTokens;
+	private String					_input;
+	private List<RawToken>			_rawTokens;
 	
-	public SelfToken(String id) {
-		this._id = id;
+	public TokenManager(String input) {
+		this._input = input;
 	}
 	
-	@Override
-	public boolean matches(DataWrapper wrapper) {
-		Token representedToken = TokenManager.getTokenById(_id);
-		return representedToken.matches(wrapper);
+	private void _identify() {
+		IdentificationManager identificationManager = new IdentificationManager(_rawTokens);
+		this._identifiedTokens = identificationManager.getIdentifiedTokens();
+	}
+	
+	private void _tokenize() {
+		Tokenizer tokenizer = new Tokenizer(_input);
+		this._rawTokens = tokenizer.getTokens();
+	}
+	
+	public List<IdentifiedToken> getIdentifiedTokens() {
+		return this._identifiedTokens;
+	}
+	
+	public void start() {
+		_tokenize();
+		_identify();
 	}
 }

@@ -23,56 +23,16 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.finn_tegeler.developing.school.modules;
-
-import java.util.Arrays;
-import java.util.List;
+package de.finn_tegeler.developing.school.compiler;
 
 /**
  * @author Finn Tegeler
  */
-public class NTerminalToken extends Token {
+public class Scanner {
 	
-	private List<TokenSequence> _options;
+	private Tokenizer _tokenizer;
 	
-	public NTerminalToken(TokenSequence... options) {
-		this._options = Arrays.asList(options);
-	}
-	
-	@Override
-	public boolean matches(DataWrapper wrapper) {
-		boolean globalResult = false;
-		if (wrapper.in()) {
-			for (TokenSequence sequence : _options) {
-				int id = wrapper.startRecording();
-				boolean result = false;
-				for (Token token : sequence.getOptions()) {
-					if (!token.matches(wrapper)) { // If one token does not match in the sequence
-						result = false; // This sequence does not match
-						break; // And the next one will be tried
-					} else {
-						result = true;
-					}
-				}
-				if (!result) { // If the hole sequence failed
-					int totalMoves = wrapper.getRecording(id);
-					wrapper.stopRecording(id);
-					wrapper.subIndex(totalMoves); // Return to start
-				} else {
-					globalResult = true;
-					break;
-				}
-			}
-			wrapper.out();
-		} else {
-			System.out.println("[DEBUG] Was not allowed to go deeper with token '" + wrapper.get()
-			        + "' while checking for '" + getID() + "'");
-		}
-		if (!globalResult) {
-			wrapper.setGlobalErrorMessage(
-			        "Error with token '" + wrapper.getToken().getContent() + "' at " + wrapper.getToken().getLine()
-			                + ":" + wrapper.getToken().getCharacter() + ": " + wrapper.getErrorMessage());
-		}
-		return globalResult;
+	public Scanner(String input) {
+		this._tokenizer = new Tokenizer(input);
 	}
 }

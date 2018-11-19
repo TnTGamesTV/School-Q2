@@ -8,9 +8,6 @@
  * * Redistributions in binary form must reproduce the above copyright
  * notice, this list of conditions and the following disclaimer in the
  * documentation and/or other materials provided with the distribution.
- * * Neither the name of the Sun Microsystems, Inc. nor the names of its
- * contributors may be used to endorse or promote products derived from
- * this software without specific prior written permission.
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -23,25 +20,35 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package de.finn_tegeler.developing.school.modules;
+package de.finn_tegeler.developing.school.compiler.parser;
+
+import de.finn_tegeler.developing.school.compiler.parser.structure.ArithmeticExpressionDefinition;
+import de.finn_tegeler.developing.school.compiler.util.IdentifiedToken;
 
 import java.util.List;
 
 /**
  * @author Finn Tegeler
  */
-public class TokenSequence {
+public class Parser {
 	
-	private List<Token> _options;
+	private List<IdentifiedToken> _identifiedTokens;
 	
-	public TokenSequence(List<Token> options) {
-		this._options = options;
+	public Parser(List<IdentifiedToken> identifiedTokens) {
+		this._identifiedTokens = identifiedTokens;
 	}
 	
-	/**
-	 * @return the options
-	 */
-	public List<Token> getOptions() {
-		return this._options;
+	public void parse() {
+		// List<Definition> parsingStructure = ParsingStructureSupplier.supply();
+	}
+	
+	public ArithmeticExpressionDefinition parseArithmeticExpression(ParsingData data) {
+		if (!data.checkDepth()) return null;
+		if (!data.isTokenEqual("NUM")) return null;
+		int num = ParserUtil.getNumber(data.getCurrentToken().getRawToken().getContent());
+		data.nextToken();
+		if (!data.isTokenEqual("PLS")) return null;
+		String operator = "+";
+		return null;
 	}
 }
