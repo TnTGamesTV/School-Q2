@@ -22,16 +22,41 @@
  */
 package de.finn_tegeler.developing.school.compiler.parser.structure;
 
-import de.finn_tegeler.developing.school.compiler.parser.Definition;
-
+import java.util.ArrayList;
 import java.util.List;
+
+import de.finn_tegeler.developing.school.compiler.parser.Definition;
 
 /**
  * @author Finn Tegeler
  */
-public class ArithmeticExpressionDefinition extends Definition {
+public class ExpressionDefinition extends Definition {
 	
 	private List<ExpressionPart> _expression;
 	
-	public ArithmeticExpressionDefinition() {}
+	public ExpressionDefinition(ExpressionPart expressionPart) {
+		_expression = new ArrayList<>();
+		_expression.add(expressionPart);
+	}
+	
+	public ExpressionDefinition(List<ExpressionPart> expressionParts) {
+		_expression = expressionParts;
+	}
+	
+	public static ExpressionDefinition fromUp(ExpressionDefinition oldExpressionDefinition, ExpressionPart expressionPart) {
+		List<ExpressionPart> parts = new ArrayList<>();
+		parts.add(expressionPart);
+		parts.addAll(oldExpressionDefinition._expression);
+		
+		return new ExpressionDefinition(parts);
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		_expression.forEach((e) -> {
+			builder.append(e.getValue() + " " + e.getOperator() + " ");
+		});
+		return builder.toString();
+	}
 }

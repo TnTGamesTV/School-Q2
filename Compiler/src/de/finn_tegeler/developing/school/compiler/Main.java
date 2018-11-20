@@ -22,20 +22,24 @@
  */
 package de.finn_tegeler.developing.school.compiler;
 
+import de.finn_tegeler.developing.school.compiler.parser.Parser;
+
 /**
  * @author Finn Tegeler
  */
 public class Main {
 	
 	public static String	INPUT				= "void main() {\n" + "    int x = 3 + 2;\n" + "}";
-	public static String	INPUT_EXPRESSION	= "int x = 3;";
+	public static String	INPUT_EXPRESSION	= "int x = 2 + 3;";
 	
 	public static void main(String[] args) {
 		IdentificationManager.init();
-		TokenManager tokenManager = new TokenManager(INPUT);
+		TokenManager tokenManager = new TokenManager(INPUT_EXPRESSION);
 		tokenManager.start();
 		tokenManager.getIdentifiedTokens().forEach((e) -> {
 			System.out.println("'" + e.getRawToken().getContent() + "': " + e.getGroup());
 		});
+		Parser parser = new Parser(tokenManager.getIdentifiedTokens());
+		parser.parse();
 	}
 }

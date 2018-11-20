@@ -22,9 +22,14 @@
  */
 package de.finn_tegeler.developing.school.compiler.parser;
 
-import de.finn_tegeler.developing.school.compiler.parser.structure.ArithmeticExpressionDefinition;
+import de.finn_tegeler.developing.school.compiler.parser.structure.DeclarationDefinition;
+import de.finn_tegeler.developing.school.compiler.parser.structure.ExpressionDefinition;
+import de.finn_tegeler.developing.school.compiler.parser.structure.ExpressionPart;
+import de.finn_tegeler.developing.school.compiler.parser.structure.VariableDefinition;
 import de.finn_tegeler.developing.school.compiler.util.IdentifiedToken;
 
+import java.rmi.server.ExportException;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -38,17 +43,61 @@ public class Parser {
 		this._identifiedTokens = identifiedTokens;
 	}
 	
-	public void parse() {
-		// List<Definition> parsingStructure = ParsingStructureSupplier.supply();
+	private boolean _lookAhead(ParsingData data, String requiredGroup) {
+		return data.getCurrentToken().getGroup().equals(requiredGroup);
 	}
 	
-	public ArithmeticExpressionDefinition parseArithmeticExpression(ParsingData data) {
+	public void parse() {
+		ParsingData rootData = ParsingData.fromRoot(_identifiedTokens);
+		DeclarationDefinition def = parseDeclaration(rootData);
+		
+		if(def!= null) {
+			System.out.println(def.toString());
+		} else {
+			System.err.println("NULL");
+		}
+	}
+	
+	public DeclarationDefinition parseDeclaration(ParsingData data) {
+		if(!data.checkDepth()) return null;
+		
+		if(_lookAhead(data, "INT")) {
+			String type = "int";
+			data.nextToken();
+			
+			if(_lookAhead(data, "ID")) {
+				String id = data.getCurrentToken().getRawToken().getContent();
+				data.nextToken();
+				
+				if(_lookAhead(data, "EQL")) {
+					data.nextToken();
+					
+					ExpressionDefinition expression = parseExpression(data);
+					
+					if(expression != null) {
+						VariableDefinition variable = new VariableDefinition(type, id);
+						return new DeclarationDefinition(variable, expression);
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
+	public ExpressionDefinition parseExpression(ParsingData data) {
 		if (!data.checkDepth()) return null;
-		if (!data.isTokenEqual("NUM")) return null;
-		int num = ParserUtil.getNumber(data.getCurrentToken().getRawToken().getContent());
-		data.nextToken();
-		if (!data.isTokenEqual("PLS")) return null;
-		String operator = "+";
+		
+		if(_lookAhead(data, "NUM")) {
+			int num = ParserUtil.getNumber(data.getCurrentToken().getRawToken().getContent());
+			data.nextToken();
+			
+			if(_lookAhead(data, "PLS")) {
+				data.nextToken();
+				return ExpressionDefinition.fromUp(parseExpression(ParsingData.down(data)), new ExpressionPart(num, "+"));
+			} else if(_lookAhead(data, "SC")) {
+				return new ExpressionDefinition(ExpressionPart.asLast(num));
+			}
+		}
 		return null;
 	}
 }
