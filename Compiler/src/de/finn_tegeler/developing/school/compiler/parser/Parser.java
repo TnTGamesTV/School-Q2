@@ -187,10 +187,13 @@ public class Parser {
 		if (_lookAhead(data, "NUM")) {
 			int num = ParserUtil.getNumber(data.getCurrentToken().getRawToken().getContent());
 			data.nextToken();
-			if (_lookAhead(data, "PLS")) {
+			if (_lookAhead(data, "PLS") || _lookAhead(data, "MNS") || _lookAhead(data, "MLT")
+			        || _lookAhead(data, "DIV")) {
 				data.nextToken();
+				String operator = _lookAhead(data, "PLS") ? "+"
+				        : _lookAhead(data, "MNS") ? "-" : _lookAhead(data, "MLT") ? "*" : "/";
 				ExpressionDefinition expressionDefinition = ExpressionDefinition
-				        .fromUp(parseExpression(ParsingData.down(data, 0)), new ExpressionPart(num, "+"));
+				        .fromUp(parseExpression(ParsingData.down(data, 0)), new ExpressionPart(num, operator));
 				if (expressionDefinition != null) {
 					data.updateParent();
 					return expressionDefinition;

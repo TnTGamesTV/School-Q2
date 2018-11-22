@@ -34,9 +34,9 @@ public class Main {
 	
 	public static String	INPUT_INVALID	= "voi x() {\n" + "if(true){\n" + "int y = 2 + 3;\n" + "}\n int x = 3; \n"
 	        + "}";
-	public static String	INPUT_VALID		= "void x() {\n" + "if(true){\n" + "int y = 2 + 3;\n" + "}\n int x = 3; \n"
+	public static String	INPUT_VALID		= "void x() {\n" + "if(true){\n" + "int y = 2 / 3;\n" + "}\n int x = 3; \n"
 	        + "}";
-	public static boolean	TEST_VALID		= false;
+	public static boolean	TEST_VALID		= true;
 	
 	private static void init() {
 		IdentificationManager.init();

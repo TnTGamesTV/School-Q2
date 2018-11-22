@@ -52,6 +52,9 @@ public class IdentificationManager {
 		CONST_MAP.put("}", "RBR");
 		CONST_MAP.put("=", "EQL");
 		CONST_MAP.put("+", "PLS");
+		CONST_MAP.put("-", "MNS");
+		CONST_MAP.put("*", "MLT");
+		CONST_MAP.put("/", "DIV");
 		CONST_MAP.put(";", "SC");
 		CONST_MAP.put("==", "BEQL");
 	}
