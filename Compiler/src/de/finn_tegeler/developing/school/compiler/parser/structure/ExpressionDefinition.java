@@ -25,12 +25,18 @@ package de.finn_tegeler.developing.school.compiler.parser.structure;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.finn_tegeler.developing.school.compiler.parser.Definition;
-
 /**
  * @author Finn Tegeler
  */
-public class ExpressionDefinition extends Definition {
+public class ExpressionDefinition extends SubFunctionDefinition {
+	
+	public static ExpressionDefinition fromUp(ExpressionDefinition oldExpressionDefinition,
+	        ExpressionPart expressionPart) {
+		List<ExpressionPart> parts = new ArrayList<>();
+		parts.add(expressionPart);
+		parts.addAll(oldExpressionDefinition._expression);
+		return new ExpressionDefinition(parts);
+	}
 	
 	private List<ExpressionPart> _expression;
 	
@@ -43,19 +49,13 @@ public class ExpressionDefinition extends Definition {
 		_expression = expressionParts;
 	}
 	
-	public static ExpressionDefinition fromUp(ExpressionDefinition oldExpressionDefinition, ExpressionPart expressionPart) {
-		List<ExpressionPart> parts = new ArrayList<>();
-		parts.add(expressionPart);
-		parts.addAll(oldExpressionDefinition._expression);
-		
-		return new ExpressionDefinition(parts);
-	}
-	
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		_expression.forEach((e) -> {
-			builder.append(e.getValue() + " " + e.getOperator() + " ");
+			builder.append("\n" + "<ExpressionPart>" + e.getValue() + "</ExpressionPart>");
+			if (e.getOperator() != "EOE")
+			    builder.append("\n<ExpressionOperator>" + e.getOperator() + "</ExpressionOperator");
 		});
 		return builder.toString();
 	}

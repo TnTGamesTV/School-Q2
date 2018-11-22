@@ -1,18 +1,16 @@
-/* Copyright (c) 2018, Finn Tegeler.
+/*
+ * Copyright (c) 2018, Finn Tegeler.
  * All rights reserved.
- *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- *
- *     * Redistributions of source code must retain the above copyright notice,
- *       this list of conditions and the following disclaimer.
- *     * Redistributions in binary form must reproduce the above copyright
- *       notice, this list of conditions and the following disclaimer in the
- *       documentation and/or other materials provided with the distribution.
- *     * Neither the name of the Sun Microsystems, Inc. nor the names of its
- *       contributors may be used to endorse or promote products derived from
- *       this software without specific prior written permission.
- *
+ * * Redistributions of source code must retain the above copyright notice,
+ * this list of conditions and the following disclaimer.
+ * * Redistributions in binary form must reproduce the above copyright
+ * notice, this list of conditions and the following disclaimer in the
+ * documentation and/or other materials provided with the distribution.
+ * * Neither the name of the Sun Microsystems, Inc. nor the names of its
+ * contributors may be used to endorse or promote products derived from
+ * this software without specific prior written permission.
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -30,23 +28,16 @@ package de.finn_tegeler.developing.school.compiler.parser.structure;
 /**
  * @author Finn Tegeler
  */
-public class DeclarationDefinition {
-
-	private VariableDefinition _variable;
-	private ExpressionDefinition _expression;
+public class DeclarationDefinition extends SubFunctionDefinition {
+	
+	private ExpressionDefinition	_expression;
+	private VariableDefinition		_variable;
 	
 	public DeclarationDefinition(VariableDefinition variable, ExpressionDefinition expression) {
 		this._variable = variable;
 		this._expression = expression;
 	}
-
-	/**
-	 * @return the variable
-	 */
-	public VariableDefinition getVariable() {
-		return this._variable;
-	}
-
+	
 	/**
 	 * @return the expression
 	 */
@@ -54,12 +45,18 @@ public class DeclarationDefinition {
 		return this._expression;
 	}
 	
+	/**
+	 * @return the variable
+	 */
+	public VariableDefinition getVariable() {
+		return this._variable;
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		
-		builder.append("decl " + _variable.getId() + "(type: " + _variable.getType() + "): " + _expression.toString());
-		
+		builder.append("<Declare id='" + _variable.getIdentifier() + "' type='" + _variable.getType() + "'>"
+		        + _expression.toString() + "\n</Declare>");
 		return builder.toString();
 	}
 }

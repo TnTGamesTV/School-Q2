@@ -22,24 +22,40 @@
  */
 package de.finn_tegeler.developing.school.compiler;
 
+import de.finn_tegeler.developing.school.compiler.parser.ErrorManager;
 import de.finn_tegeler.developing.school.compiler.parser.Parser;
+import de.finn_tegeler.developing.school.compiler.parser.TableManager;
+import de.finn_tegeler.developing.school.compiler.parser.structure.FunctionDefinition;
 
 /**
  * @author Finn Tegeler
  */
 public class Main {
 	
-	public static String	INPUT				= "void main() {\n" + "    int x = 3 + 2;\n" + "}";
-	public static String	INPUT_EXPRESSION	= "int x = 2 + 3;";
+	public static String	INPUT_INVALID	= "voi x() {\n" + "if(true){\n" + "int y = 2 + 3;\n" + "}\n int x = 3; \n"
+	        + "}";
+	public static String	INPUT_VALID		= "void x() {\n" + "if(true){\n" + "int y = 2 + 3;\n" + "}\n int x = 3; \n"
+	        + "}";
+	public static boolean	TEST_VALID		= false;
+	
+	private static void init() {
+		IdentificationManager.init();
+		TableManager.init();
+		ErrorManager.init();
+	}
 	
 	public static void main(String[] args) {
-		IdentificationManager.init();
-		TokenManager tokenManager = new TokenManager(INPUT_EXPRESSION);
+		init();
+		TokenManager tokenManager = new TokenManager(TEST_VALID ? INPUT_VALID : INPUT_INVALID);
 		tokenManager.start();
-		tokenManager.getIdentifiedTokens().forEach((e) -> {
-			System.out.println("'" + e.getRawToken().getContent() + "': " + e.getGroup());
-		});
 		Parser parser = new Parser(tokenManager.getIdentifiedTokens());
-		parser.parse();
+		FunctionDefinition functionDefinition = (FunctionDefinition) parser.parse();
+		if (functionDefinition != null) {
+			System.out.println("PARSING COMPLETED:");
+			System.out.println(functionDefinition.toString());
+		} else {
+			System.out.println("PARSING FAILED!");
+			parser.outputError(null);
+		}
 	}
 }

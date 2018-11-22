@@ -43,6 +43,8 @@ public class IdentificationManager {
 		CONST_MAP.put("return", "RTN");
 		CONST_MAP.put("if", "IF");
 		CONST_MAP.put("else", "ELSE");
+		CONST_MAP.put("true", "TRUE");
+		CONST_MAP.put("false", "FALSE");
 		/* s chars */
 		CONST_MAP.put("(", "LPAR");
 		CONST_MAP.put(")", "RPAR");
@@ -51,6 +53,7 @@ public class IdentificationManager {
 		CONST_MAP.put("=", "EQL");
 		CONST_MAP.put("+", "PLS");
 		CONST_MAP.put(";", "SC");
+		CONST_MAP.put("==", "BEQL");
 	}
 	
 	private List<RawToken> _rawTokens;

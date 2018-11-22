@@ -22,6 +22,7 @@
  */
 package de.finn_tegeler.developing.school.compiler.parser;
 
+import de.finn_tegeler.developing.school.compiler.parser.structure.ContentDefinition;
 import de.finn_tegeler.developing.school.compiler.util.IdentifiedToken;
 
 import java.util.List;
@@ -33,24 +34,39 @@ public class ParsingData {
 	
 	public static final int CONST_MAXIMUM_DEPTH = 100;
 	
-	public static ParsingData down(ParsingData oldParserData) {
-		return new ParsingData(oldParserData._identifiedTokens, oldParserData._currentIndex, oldParserData._depth + 1);
+	public static ParsingData custom(ParsingData oldParserData, int addToScopeLeve, int currentIndex) {
+		return new ParsingData(oldParserData._identifiedTokens, currentIndex, oldParserData._depth + 1,
+		        oldParserData._scopeLevel + addToScopeLeve, oldParserData);
+	}
+	
+	public static ParsingData down(ParsingData oldParserData, int addToScopeLevel) {
+		return new ParsingData(oldParserData._identifiedTokens, oldParserData._currentIndex, oldParserData._depth + 1,
+		        oldParserData._scopeLevel + addToScopeLevel, oldParserData);
 	}
 	
 	public static ParsingData fromRoot(List<IdentifiedToken> identifiedTokens) {
-		return new ParsingData(identifiedTokens, 0, 0);
+		return new ParsingData(identifiedTokens, 0, 0, 0, null);
 	}
 	
+	private List<ContentDefinition>	_contentDefinitions;
 	private int						_currentIndex;
 	private int						_depth;
 	private List<IdentifiedToken>	_identifiedTokens;
+	private ParsingData				_parentData;
+	private int						_scopeLevel;
 	private int						_startIndex;
 	
-	public ParsingData(List<IdentifiedToken> _identifiedTokens, int startIndex, int depth) {
+	public ParsingData(List<IdentifiedToken> _identifiedTokens, int startIndex, int depth, int scopeLevel,
+	        ParsingData parentData) {
 		this._identifiedTokens = _identifiedTokens;
 		this._startIndex = startIndex;
 		this._currentIndex = startIndex;
 		this._depth = depth;
+		this._scopeLevel = scopeLevel;
+		this._parentData = parentData;
+		if (!TableManager.mapping.containsKey(scopeLevel)) {
+			TableManager.addScopeLevel(scopeLevel);
+		}
 	}
 	
 	public boolean checkDepth() {
@@ -65,6 +81,13 @@ public class ParsingData {
 		return _identifiedTokens.get(_currentIndex);
 	}
 	
+	/**
+	 * @return the scopeLevel
+	 */
+	public int getScopeLevel() {
+		return this._scopeLevel;
+	}
+	
 	public boolean isTokenEqual(String requiredGroup) {
 		return requiredGroup.equals(this.getCurrentToken().getGroup());
 	}
@@ -77,5 +100,28 @@ public class ParsingData {
 	
 	public void resetIndex() {
 		this._currentIndex = _startIndex;
+	}
+	
+	/**
+	 * @param currentIndex
+	 *            the currentIndex to set
+	 */
+	public void setCurrentIndex(int currentIndex) {
+		this._currentIndex = currentIndex;
+	}
+	
+	public void updateParent() {
+		if (_parentData != null) {
+			ParsingData parent = _parentData;
+			parent._currentIndex = _currentIndex;
+		}
+	}
+	
+	public void updateParentError() {
+		if (_parentData != null) {
+			if (ErrorManager.getError(this).length() > 0) {
+				ErrorManager.addError(_parentData, ErrorManager.getError(this));
+			}
+		}
 	}
 }
