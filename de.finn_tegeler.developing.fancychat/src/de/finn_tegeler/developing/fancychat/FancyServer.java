@@ -1,39 +1,23 @@
 package de.finn_tegeler.developing.fancychat;
 
+import de.finn_tegeler.developing.fancychat.lib.Server;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import de.finn_tegeler.developing.fancychat.lib.Server;
-
 public class FancyServer extends Server {
-
+	
 	List<ClientObject> clients = new ArrayList<>();
-
+	
 	public FancyServer(int port) {
 		super(port);
 	}
-
-	@Override
-	public void processNewConnection(String ip, int port) {
-		clients.add(new ClientObject(ip, port));
-	}
-
-	@Override
-	public void processMessage(String ip, int port, String message) {
-		ClientObject client = _translate(ip, port);
-
-		clients.forEach((c) -> {
-			if (!c.equals(client)) {
-				send(c.getIp(), c.getPort(), message);
-			}
-		});
-	}
-
+	
 	private ClientObject _translate(String ip, int port) {
 		return clients.stream().filter(e -> e.getIp().equals(ip)).filter(e -> e.getPort() == port).findFirst()
-				.orElse(null);
+		        .orElse(null);
 	}
-
+	
 	@Override
 	public void processClosedConnection(String ip, int port) {
 		clients.forEach((e) -> {
@@ -42,5 +26,20 @@ public class FancyServer extends Server {
 			}
 		});
 	}
-
+	
+	@Override
+	public void processMessage(String ip, int port, String message) {
+		ClientObject client = _translate(ip, port);
+		clients.forEach((c) -> {
+			if (!c.equals(client)) {
+				send(c.getIp(), c.getPort(), message);
+			}
+		});
+		System.out.println("Incoming message from " + ip + ":" + port + ": " + message);
+	}
+	
+	@Override
+	public void processNewConnection(String ip, int port) {
+		clients.add(new ClientObject(ip, port));
+	}
 }

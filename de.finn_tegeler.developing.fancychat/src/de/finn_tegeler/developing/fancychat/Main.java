@@ -8,17 +8,17 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 	
+	/* Server vars */
+	private static FancyServer server;
+	
 	public static void main(String[] args) {
 		if (args.length > 0) {
 			// Server
+			server = new FancyServer(60000);
 		} else {
 			// Client
+			Application.launch(Main.class, args);
 		}
-		FancyServer server = new FancyServer(60000);
-		FancyClient client = new FancyClient("client1", "10.147.64.21", 60000);
-		FancyClient client2 = new FancyClient("client2", "10.147.64.21", 60000);
-		client.send("HALLO");
-		Application.launch(Main.class, args);
 	}
 	
 	@Override
