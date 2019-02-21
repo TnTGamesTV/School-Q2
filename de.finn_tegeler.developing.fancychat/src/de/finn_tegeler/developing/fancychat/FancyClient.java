@@ -9,6 +9,8 @@ public class FancyClient extends Client {
 	public FancyClient(String name, String ip, int port) {
 		super(ip, port);
 		this.name = name;
+		
+		System.out.println("Created client @ " + ip + ":" + port);
 	}
 
 	@Override

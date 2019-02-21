@@ -1,5 +1,6 @@
 package de.finn_tegeler.developing.fancychat;
 
+import de.finn_tegeler.developing.fancychat.networking.NetworkManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,7 +15,8 @@ public class Main extends Application {
 	public static void main(String[] args) {
 		if (args.length > 0) {
 			// Server
-			server = new FancyServer(60000);
+			server = new FancyServer(60001);
+			System.out.println("Server @ " + NetworkManager.getLocalIP() + ":60000");
 		} else {
 			// Client
 			Application.launch(Main.class, args);

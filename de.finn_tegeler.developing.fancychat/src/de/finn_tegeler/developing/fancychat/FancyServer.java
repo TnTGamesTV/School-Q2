@@ -20,11 +20,9 @@ public class FancyServer extends Server {
 	
 	@Override
 	public void processClosedConnection(String ip, int port) {
-		clients.forEach((e) -> {
-			if (e.getIp().equals(ip) && e.getPort() == port) {
-				clients.remove(e);
-			}
-		});
+		clients.remove(_translate(ip, port));
+		
+		System.out.println("Client closed @ " + ip + ":" + port);
 	}
 	
 	@Override
@@ -41,5 +39,7 @@ public class FancyServer extends Server {
 	@Override
 	public void processNewConnection(String ip, int port) {
 		clients.add(new ClientObject(ip, port));
+		
+		System.out.println("New client @ " + ip + ":" + port);
 	}
 }
