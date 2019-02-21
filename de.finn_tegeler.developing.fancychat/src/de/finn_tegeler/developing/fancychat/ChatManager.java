@@ -18,6 +18,7 @@ public class ChatManager {
 	}
 	
 	public FancyClient client;
+	public String name;
 	
 	public void close() {
 		if (client != null) {
