@@ -37,7 +37,7 @@ public class FancyServer extends Server {
 			if(message == "list") {
 				_send(client, "TEST");
 			} else {
-				clients.stream().filter(c -> !c.equals(client)).forEach(c -> send(c.getIp(), c.getPort(), message));
+				clients.stream().filter(c -> !c.equals(client)).forEach(c -> send(c.getIp(), c.getPort(), client.getName() + ": " + message));
 			}
 		}
 	}
