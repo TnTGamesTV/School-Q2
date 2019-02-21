@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
 
-<VBox prefHeight="200.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.finn_tegeler.developing.fancychat.controller.MainController">
+<VBox prefHeight="400.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.finn_tegeler.developing.fancychat.controller.ChatController">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
@@ -51,14 +59,41 @@
         </Menu>
       </menus>
     </MenuBar>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+    <SplitPane dividerPositions="0.5" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+      <items>
+            <ListView prefHeight="200.0" prefWidth="200.0" />
+        <AnchorPane>
+          <children>
+            <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" style="&#10;" text="Details" textAlignment="CENTER" wrapText="false">
+                     <font>
+                <Font size="18.0" fx:id="x1" />
+                     </font>
+                     <textFill>
+                <Color blue="0.624" green="0.624" red="0.624" fx:id="x2" />
+                     </textFill></Label>
+                  <TextArea fx:id="textArea" editable="false" layoutX="7.0" layoutY="8.0" prefHeight="292.0" prefWidth="432.0" />
+                  <TextField fx:id="chatTextField" layoutX="7.0" layoutY="312.0" prefHeight="25.0" prefWidth="432.0" />
+                  <Button fx:id="sendButton" layoutX="454.0" layoutY="312.0" mnemonicParsing="false" text="Send" />
+          </children>
+        </AnchorPane>
+      </items>
+    </SplitPane>
+    <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
       <children>
-            <TextField fx:id="ipTextField" layoutX="176.0" layoutY="46.0" />
-            <TextField fx:id="portTextField" layoutX="176.0" layoutY="98.0" />
-            <Button fx:id="connectButton" layoutX="351.0" layoutY="100.0" mnemonicParsing="false" text="Connect" />
-            <Label layoutX="147.0" layoutY="50.0" text="IP" />
-            <Label layoutX="135.0" layoutY="102.0" prefHeight="17.0" prefWidth="35.0" text="PORT" />
+        <Label maxHeight="1.7976931348623157E308" maxWidth="-1.0" text="Left status" HBox.hgrow="ALWAYS">
+          <font>
+            <Font size="11.0" fx:id="x3" />
+          </font>
+          <textFill>
+            <Color blue="0.625" green="0.625" red="0.625" fx:id="x4" />
+          </textFill>
+        </Label>
+        <Pane prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS" />
+        <Label font="$x3" maxWidth="-1.0" text="Right status" textFill="$x4" HBox.hgrow="NEVER" />
       </children>
-    </AnchorPane>
+      <padding>
+        <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+      </padding>
+    </HBox>
   </children>
 </VBox>
