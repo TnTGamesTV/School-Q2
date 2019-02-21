@@ -28,11 +28,9 @@ public class FancyServer extends Server {
 	@Override
 	public void processMessage(String ip, int port, String message) {
 		ClientObject client = _translate(ip, port);
-		clients.forEach((c) -> {
-			if (!c.equals(client)) {
-				send(c.getIp(), c.getPort(), message);
-			}
-		});
+		
+		clients.stream().filter(c ->!c.equals(client)).forEach(c -> send(c.getIp(), c.getPort(), message));
+		
 		System.out.println("Incoming message from " + ip + ":" + port + ": " + message);
 	}
 	
